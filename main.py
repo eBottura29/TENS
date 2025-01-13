@@ -2,27 +2,38 @@ from pg_extensions import *
 from threading import Thread
 
 
-def tick_updater(delay):
-    """
-    Increment tick variable every x milliseconds
+class TickSystem:
+    def __init__(self):
+        self.tick = 0
+        self.running = False
 
-    Args:
-        delay: in milliseconds, how much time between each tick
-    """
-    global tick
+    def tick_updater(self, delay):
+        """
+        Starts a thread that increments the tick count every `delay` seconds.
+        """
 
-    while window.running:
-        time.sleep(delay * 1000)
-        tick += 1
+        def update_ticks():
+            while self.running:
+                time.sleep(delay)
+                self.tick += 1
+
+        self.running = True
+        updater_thread = Thread(target=update_ticks, daemon=True)
+        updater_thread.start()
+
+    def stop(self):
+        """
+        Stops the tick updater.
+        """
+        self.running = False
 
 
 def start():
-    global position, tick
+    global position, tick_system
     position = 0
-    tick = 0
 
-    tick_updater_thread = Thread(target=tick_updater, args=[50])
-    tick_updater_thread.start()
+    tick_system = TickSystem()
+    tick_system.tick_updater(1 / 20)
 
 
 def update():
@@ -33,12 +44,9 @@ def update():
     if input_manager.get_key_down(pygame.K_ESCAPE):
         window.running = False
 
-    print(tick)
-    position += 5
-    draw_circle(window.SURFACE, WHITE, Vector2(position, 0), 50)
-
     set_window(window)
 
 
 if __name__ == "__main__":
     run(start, update, 2560, 1440, True, "TENS - Testing Evolution and Natural Selection", 999)
+    tick_system.stop()

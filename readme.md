@@ -6,13 +6,13 @@ Predators:
 - Can kill preys, when they kill, energy boost
 - Need to drink water more than preys (lower dehydration toleration)
 - Have energy, when depleted, health decreases, when zero, dies
-- When sprints, energy deplets faster
+- When sprints, energy depletes faster
 
 Preys:
 - Can eat plants, when they eat, energy boost
 - Need to drink water less than predators (higher dehydration toleration)
 - Have energy, when depleted, health decreases, when zero, dies
-- When sprints, energy deplets faster
+- When sprints, energy depletes faster
 
 Plants:
 - Spawn source on random places every 2000 ticks
